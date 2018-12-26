@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity implements onPosterClickList
 
     public static List<String> postersData;
 
-    String popularMoviesLink ="http://api.themoviedb.org/3/movie/popular?api_key=8b24d94146d6e8a8b7c99ad8fb9f4512";
+    String popularMoviesLink ="http://api.themoviedb.org/3/movie/popular?api_key={Your_Api_Key}";
 
-    String topRatedMoviesLink ="http://api.themoviedb.org/3/movie/top_rated?api_key=8b24d94146d6e8a8b7c99ad8fb9f4512";
+    String topRatedMoviesLink ="http://api.themoviedb.org/3/movie/top_rated?api_key={Your_Api_Key}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
