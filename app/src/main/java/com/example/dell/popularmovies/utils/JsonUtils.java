@@ -15,14 +15,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class JsonUtils {
-    final static String BASE_URL = "http://api.themoviedb.org/3/movie/popular?api_key=8b24d94146d6e8a8b7c99ad8fb9f4512";
 
-    public static URL buildUrl() {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+    public static URL buildUrl(String moviesLink) {
+        Uri builtUri = Uri.parse(moviesLink).buildUpon()
                 .build();
 
         URL url = null;
@@ -54,21 +55,46 @@ public class JsonUtils {
         }
     }
 
-    public static Movie parseJson(String json){
+    public static List<String> allPostersData(String json){
 
-        Movie res  = null;
         JSONObject data = null;
-
+        List<String> moviesData = new ArrayList<String>();
         try{
             data = new JSONObject(json);
 
             JSONArray results =data.getJSONArray("results");
-
+            for (int i = 0; i < results.length(); i++) {
+                moviesData.add(results.getJSONObject(i).toString());
+            }
 
         }catch (JSONException e) {
             e.printStackTrace();
         }
-        return res;
+        return moviesData;
     }
 
+    public static Movie parseJson (String json){
+
+        Movie res= null ;
+        JSONObject data = null;
+        try {
+            data = new JSONObject(json);
+
+            String title = data.getString("title");
+
+            String poster_path = data.getString("poster_path");
+
+            String overview =data.getString("overview");
+
+            String release_date = data.getString("release_date");
+
+            String vote_average = data.getString("vote_average");
+
+            res = new Movie(poster_path,title, overview,  vote_average,  release_date);
+
+        } catch (JSONException e) {
+        e.printStackTrace();
+    }
+        return res;
+    }
 }

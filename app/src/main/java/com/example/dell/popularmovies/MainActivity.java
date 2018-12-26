@@ -12,34 +12,29 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.dell.popularmovies.PostersAdapter.onPosterClickListener;
 import com.example.dell.popularmovies.utils.JsonUtils;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements onPosterClickListener {
     RecyclerView posters;
     PostersAdapter postersAdapter;
 
+    public static List<String> postersData;
+
+    String popularMoviesLink ="http://api.themoviedb.org/3/movie/popular?api_key=8b24d94146d6e8a8b7c99ad8fb9f4512";
+
+    String topRatedMoviesLink ="http://api.themoviedb.org/3/movie/top_rated?api_key=8b24d94146d6e8a8b7c99ad8fb9f4512";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        popularmovies();
 
-        posters = (RecyclerView)findViewById(R.id.rv_posters);
-        postersAdapter = new PostersAdapter(this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this ,2);
-        posters.setHasFixedSize(true);
-        posters.setLayoutManager(gridLayoutManager);
-        posters.setAdapter(postersAdapter);
-
-
-
-        makeDataSearchQuery();
 
     }
 
@@ -62,13 +57,40 @@ public class MainActivity extends AppCompatActivity implements onPosterClickList
              * ways. (in our humble opinion)
              */
             case R.id.popular_movies:
+
+                popularmovies();
+
                 return true;
 
             case R.id.top_rate:
+                topRatedMovies();
+
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void topRatedMovies() {
+        makeDataSearchQuery(topRatedMoviesLink);
+
+        posters = (RecyclerView)findViewById(R.id.rv_posters);
+        postersAdapter = new PostersAdapter(this);
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(this ,2);
+        posters.setHasFixedSize(true);
+        posters.setLayoutManager(gridLayoutManager2);
+        posters.setAdapter(postersAdapter);
+    }
+
+    private void popularmovies() {
+        makeDataSearchQuery(popularMoviesLink);
+
+        posters = (RecyclerView)findViewById(R.id.rv_posters);
+        postersAdapter = new PostersAdapter(this);
+        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this ,2);
+        posters.setHasFixedSize(true);
+        posters.setLayoutManager(gridLayoutManager1);
+        posters.setAdapter(postersAdapter);
     }
 
     @Override
@@ -80,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements onPosterClickList
 
 
 
-    private void makeDataSearchQuery() {
-        URL dataUrl = JsonUtils.buildUrl();
+    private void makeDataSearchQuery(String moviesLink) {
+        URL dataUrl = JsonUtils.buildUrl(moviesLink);
         new DataQueryTask().execute(dataUrl);
     }
 
@@ -106,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements onPosterClickList
         @Override
         protected void onPostExecute(String dataResults) {
             if (dataResults != null && !dataResults.equals("")) {
-//                dataResults
+                postersData = JsonUtils.allPostersData(dataResults);
+
             }
             else
                 Toast.makeText(MainActivity.this,"there is a connection error" ,Toast.LENGTH_LONG).show();

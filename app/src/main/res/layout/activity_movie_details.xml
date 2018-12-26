@@ -14,7 +14,8 @@
         android:textStyle="bold"
         android:textSize="30sp"
         android:gravity="center"
-        android:padding="40dp"/>
+        android:padding="40dp"
+        android:background="@color/colorPrimaryDark"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -24,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:src="@drawable/poster"
-            android:layout_height="250dp"
+            android:layout_height="278dp"
             android:scaleType="fitXY"/>
         <LinearLayout
             android:orientation="vertical"
